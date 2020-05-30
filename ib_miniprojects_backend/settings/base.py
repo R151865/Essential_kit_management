@@ -24,10 +24,20 @@ ALLOWED_HOSTS = [
     "ib-miniprojects-backend-beta.apigateway.in",
     "ib-miniprojects-backend-gamma.apigateway.in",
     "127.0.0.1",
-    "localhost"
+    "localhost",
+    "644fb43b8b924285bc9916acc4f42cb3.vfs.cloud9.ap-southeast-1.amazonaws.com"
 ]
 
 ROOT_URLCONF = 'ib_miniprojects_backend.urls'
+
+AUTH_USER_MODEL = "essentials_kit_management.User"
+
+DEFAULT_OAUTH_APPLICATION_NAME = "essentials_kit_management"
+DEFAULT_OAUTH_CLIENT_ID = ""
+DEFAULT_OAUTH_CLIENT_SECRET = ""
+DEFAULT_OAUTH_SCOPES = "read write"
+DEFAULT_ACCESS_TOKEN_EXPIRY_IN_SECONDS = 1000000000
+
 
 CSRF_COOKIE_SECURE = False
 

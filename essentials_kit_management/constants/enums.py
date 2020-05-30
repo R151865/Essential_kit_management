@@ -12,3 +12,9 @@ class CodeLanguage(BaseEnumClass, enum.Enum):
     python38 = "PYTHON38"
     python38_datascience = "PYTHON38_DATASCIENCE"
     python38_aiml = "PYTHON38_AIML"
+
+
+class FormStatusEnum(enum.Enum):
+    LIVE = "LIVE"
+    CLOSED = "CLOSED"
+    DONE = "DONE"

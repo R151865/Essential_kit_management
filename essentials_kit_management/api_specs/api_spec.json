@@ -1,212 +1,602 @@
 {
-        "swagger": "2.0",
-        "host": "127.0.0.1:8000",
-        "basePath": "/api/essentials_kit_management/",
-        "info": {
-            "version": "1.0.0",
-            "title": "Simple API",
-            "description": "A simple API to learn how to write OpenAPI Specification"
-        },
-        "schemes": [
-            "http"
-        ],
-        "consumes": [
-            "application/json"
-        ],
-        "produces": [
-            "application/json"
-        ],
-        "securityDefinitions": {
-            "oauth": {
-                "tokenUrl": "http://auth.ibtspl.com/oauth2/",
-                "flow": "password",
-                "scopes": {
-                    "read": "read users",
-                    "write": "create users",
-                    "update": "update users",
-                    "delete": "delete users"
+    "swagger": "2.0",
+    "host": "127.0.0.1:8000",
+    "basePath": "/api/essentials_kit_management/",
+    "info": {
+        "version": "1.0.0",
+        "title": "Essentials Kit Management",
+        "description": "Essentials Kit Management OpenAPI Specification"
+    },
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "oauth": {
+            "tokenUrl": "http://auth.ibtspl.com/oauth2/",
+            "flow": "password",
+            "scopes": {
+                "read": "read users",
+                "write": "create users",
+                "update": "update users",
+                "delete": "delete users",
+                "superuser": "super user permission"
+            },
+            "type": "oauth2"
+        }
+    },
+    "security": [],
+    "definitions": {
+
+        "CreateUserDetails": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
                 },
-                "type": "oauth2"
-            }
+                "phone_number": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "password": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            },
+            "required": [
+                "name",
+                "phone_number",
+                "password"
+            ]
+
         },
-        "security": [],
-        "definitions": {
-            "TodoId": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
+        "UserLoginDetails": {
+            "type": "object",
+            "properties": {
+                "phone_number": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "password": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            },
+            "required": [
+                "phone_number",
+                "password"
+            ]
+        },
+        "UserTransactionsDetails": {
+            "type": "object",
+            "properties": {
+                "amount_deducted": {
+                    "type": "integer"
+                },
+                "delivery_date": {
+                    "type": "string",
+                    "format": "datetime"
+                }
+            },
+            "required": [
+                "amount_deducted",
+                "delivery_date"
+            ]
+        },
+        "UserTransactionTrackDetails": {
+            "type": "object",
+            "properties": {
+                "amount_added": {
+                    "type": "integer"
+                },
+                "approval_status": {
+                    "type": "string"
+                },
+                "delivery_transactions_details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/UserTransactionsDetails"
+                    }
+                },
+                "remaining_balance": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "amount_added",
+                "approval_status",
+                "delivery_transactions_details",
+                "remaining_balance"
+            ]
+        },
+        "TransactionRequestDetails": {
+            "type": "object",
+            "properties": {
+                "amount_paid": {
+                    "type": "integer"
+                },
+                "transaction_type": {
+                    "type": "string"
+                },
+                "transaction_id": {
+                    "type": "string"
+                },
+                "transaction_screenshot": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "amount_paid",
+                "transaction_type",
+                "transaction_id",
+                "transaction_screenshot"
+            ]
+        },
+        "AccountDetails": {
+            "type": "object",
+            "properties": {
+                "account_holder": {
+                    "type": "string"
+                },
+                "account_number": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "QR_code": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "account_holder",
+                "account_number",
+                "phone_number",
+                "QR_code"
+            ]
+        },
+
+        "FormDetails": {
+            "type": "object",
+            "properties": {
+                "form_name": {
+                    "type": "string"
+                },
+                "form_status": {
+                    "type": "string",
+                    "enum": [
+                        "LIVE",
+                        "CLOSED",
+                        "DONE"
+                    ]
+                },
+                "close_date": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "expected_delivery_data": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "items_count": {
+                    "type": "integer"
+                },
+                "estimated_cost": {
+                    "type": "integer"
+                },
+                "cost_incurred": {
+                    "type": "integer"
+                },
+                "items_pending_count": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "form_name",
+                "form_status",
+                "close_date",
+                "expected_delivery_data",
+                "items_count",
+                "estimated_cost",
+                "cost_incurred",
+                "items_pending_count"
+            ]
+
+        },
+
+        "ItemOrderDetails": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "type": "integer"
+                },
+                "brand_id": {
+                    "type": "integer"
+                },
+                "ordered_count": {
+                    "type": "integer"
+                },
+                "out_of_stock": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "order_id",
+                "brand_id",
+                "ordered_count",
+                "out_of_stock"
+            ]
+        },
+        "BrandDetails": {
+            "type": "object",
+            "properties": {
+                "brand_id": {
+                    "type": "integer"
+                },
+                "brand_name": {
+                    "type": "string"
+                },
+                "min_quantity": {
+                    "type": "integer"
+                },
+                "max_quantity": {
+                    "type": "integer"
+                },
+                "price_per_item": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "brand_id",
+                "brand_name",
+                "min_quantity",
+                "max_quantity",
+                "price_per_item"
+            ]
+        },
+
+        "SectionDetails": {
+            "type": "object",
+            "properties": {
+                "section_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "items_details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/QuestionDetails"
                     }
                 }
             },
-            "BasicTodo": {
+            "required": [
+                "section_id",
+                "name",
+                "description",
+                "items_details"
+            ]
+        },
+
+        "QuestionDetails": {
+            "type": "object",
+            "properties": {
+                "item_id": {
+                    "type": "integer"
+                },
+                "item_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "brands": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/BrandDetails"
+                    }
+                },
+                "order": {
+                    "$ref": "#/definitions/ItemOrderDetails"
+                }
+
+            },
+            "required": [
+                "item_id",
+                "item_name",
+                "description",
+                "brands",
+                "order"
+            ]
+
+        },
+        "ItemSectionDetails": {
+            "type": "object",
+            "properties": {
+                "form_name": {
+                    "type": "string"
+                },
+                "form_id": {
+                    "type": "integer"
+                },
+                "close_date": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "sections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SectionDetails"
+                    }
+                }
+            },
+            "required": [
+                "form_name",
+                "form_id",
+                "close_date",
+                "sections"
+            ]
+        }
+    },
+    "parameters": {
+
+        "CreateUserParameters": {
+            "name": "user",
+            "in": "body",
+            "description": "Create User",
+            "schema": {
+                "$ref": "#/definitions/CreateUserDetails"
+            }
+
+        },
+        "UserLoginParameters": {
+            "name": "user",
+            "in": "body",
+            "description": "User Login",
+            "schema": {
+                "$ref": "#/definitions/UserLoginDetails"
+            }
+        },
+        "CreateTransactionRequestParameters": {
+            "name": "user",
+            "in": "body",
+            "description": "Create User Transaction Request",
+            "schema": {
+                "$ref": "#/definitions/TransactionRequestDetails"
+            }
+        },
+        "FormPathParameter": {
+            "name": "form_id",
+            "in": "path",
+            "description": "Enter Form id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+        },
+        "OffsetDetailsParameters": {
+            "name": "offset",
+            "in": "query",
+            "description": "enter offset",
+            "required": true,
+            "type": "integer"
+        },
+        "LimitDetailsParameters": {
+            "name": "limit",
+            "in": "query",
+            "description": "enter limit",
+            "required": true,
+            "type": "integer"
+        }
+    },
+    "responses": {
+
+        "UserLoginResponse": {
+            "description": "Successfully Logged in",
+            "schema": {
                 "type": "object",
                 "properties": {
-                    "description": {
+                    "user_id": {
+                        "type": "integer"
+                    },
+                    "access_token": {
                         "type": "string"
                     },
-                    "is_completed": {
-                        "type": "boolean"
-                    },
-                    "remind_at": {
+                    "refresh_token": {
                         "type": "string"
+                    },
+                    "expires_in": {
+                        "type": "string",
+                        "format": "datetime"
                     }
                 },
                 "required": [
-                    "description"
+                    "user_id",
+                    "access_token",
+                    "refresh_token",
+                    "expires_in"
                 ]
-            },
-            "Todo": {
-                "allOf": [
-                    {
-                        "$ref": "#/definitions/BasicTodo"
+            }
+        },
+        "UserTransactionTrackResponse": {
+            "description": "Successfull Response",
+            "schema": {
+                "$ref": "#/definitions/UserTransactionTrackDetails"
+            }
+        },
+        "CreateTransactionRequestResponse": {
+            "description": "Successfully requested",
+            "schema": {
+                "$ref": "#/definitions/AccountDetails"
+            }
+        },
+        "GetFormsResponse": {
+            "description": "Succesfull Response",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "forms": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/FormDetails"
+                        }
                     },
-                    {
-                        "$ref": "#/definitions/TodoId"
+                    "total_forms_count": {
+                        "type": "integer"
                     }
+                },
+                "required": [
+                    "forms",
+                    "total_forms_count"
                 ]
             }
         },
-        "parameters": {
-            "TodoId": {
-                "description": "todo id",
-                "in": "path",
-                "name": "id",
-                "required": true,
-                "type": "integer"
-            },
-            "BasicTodo": {
-                "description": "Todo Parameter",
-                "in": "body",
-                "name": "todo",
-                "required": true,
-                "schema": {
-                    "$ref": "#/definitions/BasicTodo"
-                }
-            }
-        },
-        "responses": {
-            "SuccessResponse": {
-                "description": "success response"
-            }
-        },
-        "paths": {
-            "/todos/": {
-                "get": {
-                    "summary": "Get all todos",
-                    "description": "Returns a list containing all todos.",
-                    "operationId": "get_todos",
-                    "security": [
-                        {
-                            "oauth": [
-                                "read"
-                            ]
-                        }
-                    ],
-                    "responses": {
-                        "200": {
-                            "description": "A list of todos",
-                            "schema": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/Todo"
-                                }
-                            }
-                        }
-                    }
-                },
-                "post": {
-                    "summary": "create a todo",
-                    "description": "Create a todo",
-                    "operationId": "create_todo",
-                    "security": [
-                        {
-                            "oauth": [
-                                "write"
-                            ]
-                        }
-                    ],
-                    "parameters": [
-                        {
-                            "$ref": "#/parameters/BasicTodo"
-                        }
-                    ],
-                    "responses": {
-                        "200": {
-                            "description": "create a todo",
-                            "schema": {
-                                "$ref": "#/definitions/TodoId"
-                            }
-                        }
-                    }
-                }
-            },
-            "/todos/{id}/": {
-                "parameters": [
-                    {
-                        "$ref": "#/parameters/TodoId"
-                    }
-                ],
-                "get": {
-                    "summary": "Get a todo",
-                    "description": "Returns a todo.",
-                    "operationId": "get_todo",
-                    "security": [
-                        {
-                            "oauth": [
-                                "read"
-                            ]
-                        }
-                    ],
-                    "responses": {
-                        "200": {
-                            "description": "A todo",
-                            "schema": {
-                                "$ref": "#/definitions/Todo"
-                            }
-                        }
-                    }
-                },
-                "put": {
-                    "parameters": [
-                        {
-                            "$ref": "#/parameters/BasicTodo"
-                        }
-                    ],
-                    "summary": "Updates a todo",
-                    "description": "Updates a todo.",
-                    "operationId": "update_todo",
-                    "security": [
-                        {
-                            "oauth": [
-                                "update"
-                            ]
-                        }
-                    ],
-                    "responses": {
-                        "200": {
-                            "$ref": "#/responses/SuccessResponse"
-                        }
-                    }
-                },
-                "delete": {
-                    "summary": "Deletes a todo",
-                    "description": "Deletes a todo.",
-                    "operationId": "delete_todo",
-                    "security": [
-                        {
-                            "oauth": [
-                                "delete"
-                            ]
-                        }
-                    ],
-                    "responses": {
-                        "200": {
-                            "$ref": "#/responses/SuccessResponse"
-                        }
-                    }
-                }
+        "GetFormResponse": {
+            "description": "Succesfull Response",
+            "schema": {
+                "$ref": "#/definitions/ItemSectionDetails"
             }
         }
+    },
+    "paths": {
+
+        "/users/create/": {
+            "post": {
+                "operationId": "create_user",
+                "summary": "Create New User",
+                "description": "Create user with given data",
+                "security": [{
+                    "oauth": []
+                }],
+                "parameters": [{
+                    "$ref": "#/parameters/CreateUserParameters"
+                }],
+                "responses": {
+                    "201": {
+                        "description": "User Successfully Created"
+                    },
+                    "400": {
+                        "description": "Invalid user Details"
+                    }
+                }
+            }
+        },
+        "/users/login/": {
+            "get": {
+                "operationId": "user_login",
+                "summary": "User Login",
+                "description": "return user access token if user logged with valid details",
+                "security": [{
+                    "oauth": []
+                }],
+                "parameters": [{
+                    "$ref": "#/parameters/UserLoginParameters"
+                }],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/UserLoginResponse"
+                    },
+                    "404": {
+                        "description": "Invalid Login details"
+                    }
+                }
+
+            }
+
+        },
+        "/users/transactions/": {
+            "get": {
+                "operationId": "get_user_transactions_tracks",
+                "summary": "Get User Transactions Tracks",
+                "description": "returns users transactions details and tracks",
+                "security": [{
+                    "oauth": []
+                }],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/UserTransactionTrackResponse"
+                    },
+                    "403": {
+                        "description": "Invalid user to get transactions details"
+                    }
+                }
+
+            }
+        },
+        "/users/transactions/request/": {
+            "post": {
+                "operationId": "create_transaction_request",
+                "summary": "Create Transaction Request",
+                "description": "create transactions request and returns account details",
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "parameters": [{
+                    "$ref": "#/parameters/CreateTransactionRequestParameters"
+                }],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/CreateTransactionRequestResponse"
+                    },
+                    "404": {
+                        "description": "Invalid transaction id"
+                    }
+                }
+
+            }
+        },
+        "/forms/": {
+            "get": {
+                "operationId": "get_forms",
+                "summary": "Get Forms",
+                "description": "returns list of forms with details",
+                "security": [{
+                    "oauth": []
+                }],
+                "parameters": [{
+                        "$ref": "#/parameters/OffsetDetailsParameters"
+                    },
+                    {
+                        "$ref": "#/parameters/LimitDetailsParameters"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/GetFormsResponse"
+                    }
+                }
+
+            }
+        },
+        "/forms/{form_id}/": {
+            "get": {
+                "operationId": "get_form",
+                "summary": "Get Form ",
+                "description": "returns form details",
+                "security": [{
+                    "oauth": []
+                }],
+                "parameters": [{
+                    "$ref": "#/parameters/FormPathParameter"
+                }],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/GetFormResponse"
+                    }
+                }
+
+            }
+        }
+
     }
-    
+}
