@@ -12,14 +12,6 @@ from essentials_kit_management.interactors.storages.dtos import (
 
 users_list = [
     {
-        "name": "stevejobs",
-        "username": 9876543210,
-        "password": "steve123"},
-    {
-        "name": "che",
-        "username": 9876543212,
-        "password": "che123"},
-    {
         "name": "sulthan",
         "username": 9876543213,
         "password": "sulthan123"},
@@ -39,20 +31,17 @@ brand_list = [
     {"name": "brand2", "min_quantity": 2, "max_quantity": 8, "price_per_item": 200},
     {"name": "brand3", "min_quantity": 3, "max_quantity": 9, "price_per_item": 300},
     {"name": "brand4", "min_quantity": 4, "max_quantity": 9, "price_per_item": 400},
-    {"name": "brand5", "min_quantity": 5, "max_quantity": 9, "price_per_item": 500}
     ]
 
 item_list = [
-    {"name": "item1", "description": "item1", "brand_id": 1},
-    {"name": "item2", "description": "item2", "brand_id": 2},
-    {"name": "item3", "description": "item3", "brand_id": 3}
+    {"name": "item1", "description": "item1"},
+    {"name": "item2", "description": "item2"},
+    {"name": "item3", "description": "item3"}
     ]
 
-
 section_list = [
-    {"name": "section1", "description": "section1", "item_id": 1},
-    {"name": "section2", "description": "section2", "item_id": 2},
-    {"name": "section3", "description": "section3", "item_id": 3}
+    {"name": "section1", "description": "section1"},
+    {"name": "section2", "description": "section2"},
     ]
 
 
@@ -62,25 +51,21 @@ form_list = [
         "description": "form1",
         "close_date": "2020-10-10",
         "expected_delivery_date": "2020-10-10",
-        "section_id": 1,
         "status": "LIVE" },
     {
         "name": "form2",
         "description": "form2",
         "close_date": "2020-10-10",
         "expected_delivery_date": "2020-10-10",
-        "section_id": 2,
         "status": "CLOSED" },
     {
         "name": "form3",
         "description": "form3",
         "close_date": "2020-10-10",
         "expected_delivery_date": "2020-10-10",
-        "section_id": 3,
         "status": "DONE" }
 
     ]
-
 
 
 order_list = [
@@ -119,63 +104,49 @@ order_list = [
 @pytest.fixture()
 def create_sections():
 
-    section_objs = Section.objects.bulk_create(
-        [
-            Section(name=section["name"],
-                    description=section["description"],
-                    items_id=section["item_id"])
+    section_objs = [
+            Section.objects.create(name=section["name"],
+                    description=section["description"])
             for section in section_list
             ]
-        )
 
     return section_objs
 
 
 @pytest.fixture()
 def add_multiple_sections_to_form(create_sections, create_forms):
-
-    create_forms[0].section_set.add(
-        create_sections[1]
-        )
-    create_forms[0].save()
-
+    create_forms[0].sections.add(create_sections[0],
+                                 create_sections[1])
 
 @pytest.fixture()
 def add_multiple_items_to_section(create_items, create_sections):
-    create_sections[0].item.add(
-        create_items[1], create_items[2]
-        )
-    create_sections[0].save()
-
+    create_sections[0].items.add(create_items[0],
+                                 create_items[1])
+    create_sections[1].items.add(create_items[2])
 
 
 @pytest.fixture()
 def create_items():
 
-    item_objs = Item.objects.bulk_create(
-        [
-            Item(name=item["name"],
-                 description=item["description"],
-                 brand_id=item["brand_id"])
+    item_objs = [   
+            Item.objects.create(name=item["name"],
+                 description=item["description"])
             for item in item_list
             ]
-        )
-
     return item_objs
+
 
 @pytest.fixture()
 def adding_brands_to_items(create_brands, create_items):
-    create_items[0].brand_set.add(
-        create_brands[-1],
-        create_brands[-2]
-    )
-    create_items[0].save()
+    create_items[0].brand.add(create_brands[0],
+                                  create_brands[1])
+    create_items[1].brand.add(create_brands[2])
+    create_items[2].brand.add(create_brands[3])
 
 @pytest.fixture()
 def create_orders():
-    order_objs = Order.objects.bulk_create(
-        [
-            Order(user_id=order["user_id"],
+    order_objs = [
+            Order.objects.create(user_id=order["user_id"],
                   item_id=order["item_id"],
                   brand_id=order["brand_id"],
                   form_id=order["form_id"],
@@ -186,7 +157,6 @@ def create_orders():
                 )
             for order in order_list
             ]
-        )
     return order_objs
 
 
@@ -194,47 +164,41 @@ def create_orders():
 @pytest.fixture()
 def create_forms():
 
-    form_objs = Form.objects.bulk_create(
-        [
-            Form(name=form["name"],
+    form_objs = [
+            Form.objects.create(name=form["name"],
                  description=form["description"],
                  close_date=form["close_date"],
                  expected_delivery_date=form["expected_delivery_date"],
-                 sections_id=form["section_id"],
                  status=form["status"])
             for form in form_list
             ]
-        )
     return form_objs
 
 
 @pytest.fixture()
 def create_brands():
 
-    brand_objs = Brand.objects.bulk_create(
-        [
-            Brand(name=brand["name"],
-                  min_quantity=brand["min_quantity"],
-                  max_quantity=brand["max_quantity"],
-                  price_per_item=brand["price_per_item"])
+    brand_objs = [
+            Brand.objects.create(
+                name=brand["name"],
+                min_quantity=brand["min_quantity"],
+                max_quantity=brand["max_quantity"],
+                price_per_item=brand["price_per_item"])
             for brand in brand_list
             ]
-        )
     return brand_objs
 
 
 @pytest.fixture()
 def create_users():
 
-    user_objs = User.objects.bulk_create(
-        [
-            User(name=user["name"],
-                 username=user["username"],
-                 password=user["password"])
+    user_objs = [
+            User.objects.create(
+                name=user["name"],
+                username=user["username"],
+                password=user["password"])
             for user in users_list
         ]
-    )
-
     return user_objs
 
 @pytest.fixture()

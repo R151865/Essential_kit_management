@@ -6,42 +6,46 @@ from essentials_kit_management.storages.form_storage_implementation import \
     FormStorageImplementation
 
 from essentials_kit_management.interactors.storages.dtos import (
-    OrderDto, ItemDto
+    SectionDto, GetFormItemDtoWithSectionId
     )
 
 
 @pytest.mark.django_db
-def test_get_item_dtos_with_valid_details_return_dtos(create_users,
-                                                      create_brands,
-                                                      create_items,
-                                                      create_orders,
-                                                      create_sections,
-                                                      create_forms):
+def test_get_item_dtos_with_valid_details_return_dtos(populate_data):
 
     # Arrange
-    order_dtos = [
-        OrderDto(
-            order_id=1,
-            user_id=1,
-            item_id=1,
-            brand_id=1,
-            form_id=1,
-            section_id= 1,
-            count=10,
-            pending_count=5,
-            out_of_stock=0)
+    section_dtos = [
+        SectionDto(
+            section_id=1,
+            name="section1",
+            description="section1"),
+        SectionDto(
+            section_id=2,
+            name="section2",
+            description="section2")
         ]
-    expected_items_dtos = [
-        ItemDto(item_id=1,
+
+    expected_item_dtos = [
+        GetFormItemDtoWithSectionId(
+                item_id=1,
                 name="item1",
                 description="item1",
-                brand_id=1)
-        ]
-    
+                section_id=1),
+        GetFormItemDtoWithSectionId(
+                item_id=2,
+                name="item2",
+                description="item2",
+                section_id=1),
+        GetFormItemDtoWithSectionId(
+                item_id=3,
+                name="item3",
+                description="item3",
+                section_id=2)]
+
     storage = FormStorageImplementation()
 
     # Act
-    actual_items_dtos = storage.get_item_dtos(order_dtos)
+    actual_item_dtos = storage.get_item_dtos(section_dtos=section_dtos)
 
     # Assert
-    assert actual_items_dtos == expected_items_dtos
+    assert actual_item_dtos == expected_item_dtos

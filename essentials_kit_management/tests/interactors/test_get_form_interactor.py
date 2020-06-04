@@ -34,7 +34,7 @@ def test_get_form_interactors_with_valid_details(
     form_storage = create_autospec(FormStorageInterface)
     form_presenter = create_autospec(FormPresenterInterface)
     interactor = GetFormInteractor(form_storage=form_storage,
-                                   form_presenter=form_presenter)
+                                  form_presenter=form_presenter)
 
 
     form_storage.get_form_dto.return_value = get_form_dto
@@ -61,7 +61,7 @@ def test_get_form_interactors_with_valid_details(
                                                         form_id=form_id)
     form_storage.get_form_sections_dtos.assert_called_once_with(form_id=form_id)
     form_storage.get_item_dtos.assert_called_once_with(
-        order_dtos=get_form_order_dtos)
+        section_dtos=get_form_section_dtos)
     form_storage.get_brand_dtos.assert_called_once_with(
         item_dtos=get_form_items_dtos)
 
@@ -75,7 +75,7 @@ def test_get_form_interactors_with_invalid_form_id_raise_exception():
     form_storage = create_autospec(FormStorageInterface)
     form_presenter = create_autospec(FormPresenterInterface)
     interactor = GetFormInteractor(form_storage=form_storage,
-                                   form_presenter=form_presenter)
+                                  form_presenter=form_presenter)
 
     form_storage.is_valid_form_id.return_value = False
     form_presenter.raise_invalid_form_id_exception.side_effect = NotFound

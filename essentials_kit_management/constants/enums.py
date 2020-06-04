@@ -18,3 +18,15 @@ class FormStatusEnum(enum.Enum):
     LIVE = "LIVE"
     CLOSED = "CLOSED"
     DONE = "DONE"
+
+
+class TransactionStatusEnum(enum.Enum):
+    APPROVED = "APPROVED"
+    PENDING = "PENDING"
+    REJECTED = "REJECTED"
+
+
+class TransactionTypeEnum(enum.Enum):
+    PHONE_PAY = "PHONE_PAY"
+    GOOGLE_PAY = "GOOGLE_PAY"
+    PAYTM = "PAYTM"

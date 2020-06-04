@@ -38,9 +38,11 @@ class FormStorageInterface():
     def get_form_sections_dtos(self, form_id: int) ->List[SectionDto]:
         pass
 
-    def get_item_dtos(self, order_dtos) ->List[ItemDto]:
+    def get_item_dtos(self, section_dtos) ->List[ItemDto]:
         pass
 
     def get_brand_dtos(self, item_dtos) ->List[BrandDto]:
         pass
 
+    def are_they_valid_offset_and_limit(self, offset: int, limit: int):
+        pass

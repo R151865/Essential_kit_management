@@ -2,8 +2,8 @@
 
 REQUEST_BODY_JSON = """
 {
-    "phone_number": 1,
-    "password": 1
+    "username": "string",
+    "password": "string"
 }
 """
 

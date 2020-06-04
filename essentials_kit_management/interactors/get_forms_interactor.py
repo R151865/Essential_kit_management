@@ -19,7 +19,16 @@ class GetFormsInteractor:
         self.form_storage = form_storage
         self.form_presenter = form_presenter
 
-    def get_forms(self, user_id: int, offset: int, limit: int):
+    def get_forms(self, user_id: int, offset=0, limit=30):
+
+        are_they_valid_offset_and_limit = \
+            self.form_storage.are_they_valid_offset_and_limit(offset=offset,
+                                                               limit=limit)
+        invalid_offset_and_limit_given = not are_they_valid_offset_and_limit
+
+        if invalid_offset_and_limit_given:
+            self.form_presenter.raise_invalid_offset_and_limit_exception()
+            return
 
         forms_dtos = self.form_storage.get_forms_dtos(offset=offset, limit=limit)
         user_order_dtos = self.form_storage.get_user_order_dtos(user_id)
@@ -162,7 +171,6 @@ class GetFormsInteractor:
         cost = 0
 
         for order in orders:
-            brand = brand_dicts[order.brand_id]
             brand = brand_dicts[order.brand_id]
             price_per_item = brand.price_per_item
             cost = cost + order.count*price_per_item

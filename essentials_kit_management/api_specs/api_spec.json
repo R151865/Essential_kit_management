@@ -39,18 +39,16 @@
                 "name": {
                     "type": "string"
                 },
-                "phone_number": {
-                    "type": "integer",
-                    "format": "int64"
+                "username": {
+                    "type": "string"
                 },
                 "password": {
-                    "type": "integer",
-                    "format": "int64"
+                    "type": "string"
                 }
             },
             "required": [
                 "name",
-                "phone_number",
+                "username",
                 "password"
             ]
 
@@ -58,17 +56,15 @@
         "UserLoginDetails": {
             "type": "object",
             "properties": {
-                "phone_number": {
-                    "type": "integer",
-                    "format": "int64"
+                "username": {
+                    "type": "string"
                 },
                 "password": {
-                    "type": "integer",
-                    "format": "int64"
+                    "type": "string"
                 }
             },
             "required": [
-                "phone_number",
+                "username",
                 "password"
             ]
         },
@@ -91,27 +87,35 @@
         "UserTransactionTrackDetails": {
             "type": "object",
             "properties": {
-                "amount_added": {
+                "transaction_id": {
                     "type": "integer"
                 },
-                "approval_status": {
+                "date": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "amount": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "APPROVED",
+                        "PENDING",
+                        "REJECTED"
+                    ]
+
+                },
+                "remark": {
                     "type": "string"
-                },
-                "delivery_transactions_details": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/UserTransactionsDetails"
-                    }
-                },
-                "remaining_balance": {
-                    "type": "integer"
                 }
             },
             "required": [
-                "amount_added",
-                "approval_status",
-                "delivery_transactions_details",
-                "remaining_balance"
+                "transaction_id",
+                "date",
+                "amount",
+                "status",
+                "remark"
             ]
         },
         "TransactionRequestDetails": {
@@ -121,10 +125,16 @@
                     "type": "integer"
                 },
                 "transaction_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "PHONE_PAY",
+                        "GOOGLE_PAY",
+                        "PAYTM"
+                    ]
                 },
                 "transaction_id": {
-                    "type": "string"
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "transaction_screenshot": {
                     "type": "string"
@@ -140,28 +150,14 @@
         "AccountDetails": {
             "type": "object",
             "properties": {
-                "account_holder": {
-                    "type": "string"
-                },
-                "account_number": {
-                    "type": "string"
-                },
-                "phone_number": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "QR_code": {
+                "upi_id": {
                     "type": "string"
                 }
             },
             "required": [
-                "account_holder",
-                "account_number",
-                "phone_number",
-                "QR_code"
+                "upi_id"
             ]
         },
-
         "FormDetails": {
             "type": "object",
             "properties": {
@@ -209,7 +205,6 @@
             ]
 
         },
-
         "ItemOrderDetails": {
             "type": "object",
             "properties": {
@@ -260,7 +255,6 @@
                 "price_per_item"
             ]
         },
-
         "SectionDetails": {
             "type": "object",
             "properties": {
@@ -287,7 +281,6 @@
                 "items_details"
             ]
         },
-
         "QuestionDetails": {
             "type": "object",
             "properties": {
@@ -346,14 +339,104 @@
                 "close_date",
                 "sections"
             ]
+        },
+        "UpdateFormSectionDetails": {
+            "type": "object",
+            "properties": {
+                "section_id": {
+                    "type": "integer"
+                },
+                "order_details": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "item_id": {
+                                "type": "integer"
+                            },
+                            "order_id": {
+                                "type": "integer"
+                            },
+                            "brand_id": {
+                                "type": "integer"
+                            },
+                            "ordered_count": {
+                                "type": "integer"
+                            },
+                            "out_of_stock": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "item_id",
+                            "order_id",
+                            "brand_id",
+                            "ordered_count",
+                            "out_of_stock"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "section_id",
+                "order_details"
+            ]
+        },
+        "UserOrderedDetails": {
+            "type": "object",
+            "properties": {
+                "item_id": {
+                    "type": "integer"
+                },
+                "item_name": {
+                    "type": "string"
+                },
+                "items_added": {
+                    "type": "integer"
+                },
+                "items_recived": {
+                    "type": "integer"
+                },
+                "cost_incurred": {
+                    "type": "integer"
+                },
+                "out_of_stock": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "item_id",
+                "item_name",
+                "items_added",
+                "items_recived",
+                "cost_incurred",
+                "out_of_stock"
+            ]
+        },
+
+        "CreateFormDetails": {
+            "type": "object",
+            "properties": {
+                "form_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "form_name",
+                "description"
+            ]
         }
+
     },
     "parameters": {
 
-        "CreateUserParameters": {
+        "CreateUserSignUpParameters": {
             "name": "user",
             "in": "body",
-            "description": "Create User",
+            "description": "Create User SignUp Details",
             "schema": {
                 "$ref": "#/definitions/CreateUserDetails"
             }
@@ -396,7 +479,36 @@
             "description": "enter limit",
             "required": true,
             "type": "integer"
+        },
+        "UpadteFormParameters": {
+            "name": "form",
+            "in": "body",
+            "description": "upadate form",
+            "required": true,
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "form_id": {
+                        "type": "integer"
+                    },
+                    "sections": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/UpdateFormSectionDetails"
+                        }
+                    }
+                },
+                "required": [
+                    "form_id"
+                ]
+            }
+        },
+        "CreateFormParameters": {
+            "name": "form",
+            "in": "body",
+            "description": "up"
         }
+
     },
     "responses": {
 
@@ -427,16 +539,25 @@
                 ]
             }
         },
-        "UserTransactionTrackResponse": {
+        "UserTransactionsDetailsResponse": {
             "description": "Successfull Response",
             "schema": {
-                "$ref": "#/definitions/UserTransactionTrackDetails"
-            }
-        },
-        "CreateTransactionRequestResponse": {
-            "description": "Successfully requested",
-            "schema": {
-                "$ref": "#/definitions/AccountDetails"
+                "type": "object",
+                "properties": {
+                    "balance": {
+                        "type": "integer"
+                    },
+                    "transactions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/UserTransactionTrackDetails"
+                        }
+                    }
+                },
+                "required": [
+                    "balance",
+                    "transactions"
+                ]
             }
         },
         "GetFormsResponse": {
@@ -465,27 +586,42 @@
             "schema": {
                 "$ref": "#/definitions/ItemSectionDetails"
             }
+        },
+        "GetUserOrderedDetailsResponse": {
+            "description": "Succesfully user ordered details Recieved",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/UserOrderedDetails"
+                }
+            }
+        },
+        "GetAdminAccountDetailsResponse": {
+            "description": "Succesfully got admin account details",
+            "schema": {
+                "$ref": "#/definitions/AccountDetails"
+            }
         }
     },
     "paths": {
 
-        "/users/create/": {
+        "/users/signup/": {
             "post": {
-                "operationId": "create_user",
-                "summary": "Create New User",
-                "description": "Create user with given data",
+                "operationId": "create_user_signup",
+                "summary": "Create User Sign",
+                "description": "Create User SignUp",
                 "security": [{
                     "oauth": []
                 }],
                 "parameters": [{
-                    "$ref": "#/parameters/CreateUserParameters"
+                    "$ref": "#/parameters/CreateUserSignUpParameters"
                 }],
                 "responses": {
                     "201": {
-                        "description": "User Successfully Created"
+                        "$ref": "#/responses/UserLoginResponse"
                     },
                     "400": {
-                        "description": "Invalid user Details"
+                        "description": "User name already exists"
                     }
                 }
             }
@@ -515,19 +651,19 @@
         },
         "/users/transactions/": {
             "get": {
-                "operationId": "get_user_transactions_tracks",
-                "summary": "Get User Transactions Tracks",
-                "description": "returns users transactions details and tracks",
+                "operationId": "get_user_transactions",
+                "summary": "Get User Transactions",
+                "description": "returns users transactions details",
                 "security": [{
                     "oauth": []
                 }],
                 "parameters": [],
                 "responses": {
                     "200": {
-                        "$ref": "#/responses/UserTransactionTrackResponse"
+                        "$ref": "#/responses/UserTransactionsDetailsResponse"
                     },
                     "403": {
-                        "description": "Invalid user to get transactions details"
+                        "description": "Unathourized user to get transactions"
                     }
                 }
 
@@ -537,7 +673,7 @@
             "post": {
                 "operationId": "create_transaction_request",
                 "summary": "Create Transaction Request",
-                "description": "create transactions request and returns account details",
+                "description": "create transaction request with valid input data",
                 "security": [{
                     "oauth": ["superuser"]
                 }],
@@ -545,11 +681,11 @@
                     "$ref": "#/parameters/CreateTransactionRequestParameters"
                 }],
                 "responses": {
-                    "200": {
-                        "$ref": "#/responses/CreateTransactionRequestResponse"
+                    "201": {
+                        "description": "Successfully transaction request created"
                     },
-                    "404": {
-                        "description": "Invalid transaction id"
+                    "400": {
+                        "description": "Invalid payment provided"
                     }
                 }
 
@@ -594,9 +730,78 @@
                         "$ref": "#/responses/GetFormResponse"
                     }
                 }
-
+            }
+        },
+        "/forms/upadte/": {
+            "post": {
+                "operationId": "update_form",
+                "summary": "Update Form",
+                "description": "updates the form data",
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "parameters": [{
+                    "$ref": "#/parameters/UpadteFormParameters"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successfully Upadated"
+                    },
+                    "400": {
+                        "description": "Please provide valid details"
+                    }
+                }
+            }
+        },
+        "/forms/{form_id}/ordered/details/": {
+            "get": {
+                "operationId": "get_user_ordered_details",
+                "summary": "Get User Orded Details",
+                "description": "return list of ordered details of items per section",
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "parameters": [{
+                    "$ref": "#/parameters/FormPathParameter"
+                }],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/GetUserOrderedDetailsResponse"
+                    },
+                    "400": {
+                        "description": "Please provide valid form id"
+                    }
+                }
+            }
+        },
+        "/admin/account/details/": {
+            "get": {
+                "operationId": "get_admin_account_details",
+                "summary": "Get Admin Account Details",
+                "description": "return admin upi id  for payment ",
+                "security": [{
+                    "oauth": []
+                }],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "$ref": "#/responses/GetAdminAccountDetailsResponse"
+                    }
+                }
+            }
+        },
+        "/forms/create/": {
+            "post": {
+                "operationId": "create_form",
+                "summary": "Create Form",
+                "description": "return form details after creation of form",
+                "security": [{
+                    "oauth2": ["superuser"]
+                }],
+                "parameters": [],
+                "responses": {}
             }
         }
-
     }
+
 }

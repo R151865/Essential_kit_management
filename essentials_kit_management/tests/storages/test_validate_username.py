@@ -23,20 +23,21 @@ def test_validate_username_with_invalid_details(create_users):
 
 @pytest.mark.django_db
 def test_validate_username_with_valid_details_return_user_id(create_users):
-
+ 
     # Arrange
-    username = 9876543210
-    password = "steve123"
-    expected_user_id = 1
+    username = "9876543214"
+    password = "anju123"
     storage = UserStorageImplementation()
 
     # Act
     actual_user_id = storage.validate_username(username=username,
-                                        password=password)
+                                               password=password)
 
     # Assert
     user_obj = User.objects.get(id=actual_user_id)
+    
     user_id = user_obj.id
 
-    assert actual_user_id == expected_user_id
     assert actual_user_id == user_id
+    assert user_obj.username == username
+    assert user_obj.password == password

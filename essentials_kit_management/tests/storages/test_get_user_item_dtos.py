@@ -43,12 +43,10 @@ def test_get_user_item_dtos_with_valid_details_return_dtos(create_users,
 
     item1 = ItemDto(item_id=1,
                     name="item1",
-                    description="item1",
-                    brand_id=1)
+                    description="item1")
     item2= ItemDto(item_id=2,
                     name="item2",
-                    description="item2",
-                    brand_id=2)
+                    description="item2")
     
     order_dtos = [order1, order2]
     expected_list = [item1, item2]

@@ -9,6 +9,7 @@ from essentials_kit_management.models import (
 
 from essentials_kit_management.interactors.storages.dtos import (
     FormDto, OrderDto, BrandDto, ItemDto, SectionDto, FormCompleteDetailsDto,
+    GetFormItemDtoWithSectionId, GetFormBrandDtoWithItemId
 )
 
 
@@ -72,8 +73,7 @@ class FormStorageImplementation(FormStorageInterface):
     def _convert_item_obj_to_dto(self, item) ->ItemDto:
         return ItemDto(item_id=item.id,
                        name=item.name,
-                       description=item.description,
-                       brand_id=item.brand_id)
+                       description=item.description)
 
     def _convert_section_obj_to_dto(self, section_obj) ->SectionDto:
         return SectionDto(section_id=section_obj.id,
@@ -122,11 +122,8 @@ class FormStorageImplementation(FormStorageInterface):
         return order_dtos_list
 
     def get_form_sections_dtos(self, form_id: int) ->List[SectionDto]:
-        section_ids = [
-            Order.objects.filter(form_id=form_id) \
-                 .values_list("section_id", flat=True)]
-
-        section_objs = Section.objects.filter(id__in=section_ids)
+        form_obj = Form.objects.prefetch_related("sections").get(id=form_id)
+        section_objs =  form_obj.sections.all()
 
         section_dtos_list = [
             self._convert_section_obj_to_dto(section)
@@ -134,27 +131,68 @@ class FormStorageImplementation(FormStorageInterface):
             ]
         return section_dtos_list
 
-    def get_item_dtos(self, order_dtos) ->List[ItemDto]:
-        item_ids = [order.item_id for order in order_dtos]
 
-        item_objs = Item.objects.filter(id__in=item_ids)
+    def get_item_dtos(self, section_dtos) ->List[GetFormItemDtoWithSectionId]:
+        section_ids = [section.section_id for section in section_dtos]
 
-        item_dtos_list = [
-            self._convert_item_obj_to_dto(item)
-            for item in item_objs
-            ]
-        return item_dtos_list
+        section_objs = Section.objects \
+                              .prefetch_related("items") \
+                              .filter(id__in=section_ids)
+        items_list = []
 
-    def get_brand_dtos(self, item_dtos) ->List[BrandDto]:
+        for section in section_objs:
+            section_id = section.id
+            items_objs = section.items.all()
+            dto_list = self._convert_items_to_dtos(section_id=section_id,
+                                                   items_objs=items_objs)
+            items_list += dto_list
+        return items_list
 
-        items_ids = [item.item_id for item in item_dtos]
-        brand_ids = list(Order.objects.filter(item_id__in=items_ids) \
-                          .values_list("brand_id", flat=True))
 
-        brand_objs = Brand.objects.filter(id__in=brand_ids)
+    def _convert_items_to_dtos(self, section_id, items_objs):
+        item_dtos = []
 
-        brand_dtos_list = [
-            self._convert_brand_obj_to_dto(brand)
-            for brand in brand_objs
-        ]
-        return brand_dtos_list
+        for item in items_objs:
+            dto = GetFormItemDtoWithSectionId(item_id=item.id,
+                                              name=item.name,
+                                              description=item.description,
+                                              section_id=section_id)
+            item_dtos.append(dto)
+        return item_dtos
+
+
+    def get_brand_dtos(self, item_dtos) ->List[GetFormBrandDtoWithItemId]:
+        item_ids = [item.item_id for item in item_dtos]
+         # i need to change brand to brands
+        item_objs =  Item.objects \
+                     .prefetch_related("brand") \
+                     .filter(id__in=item_ids)
+
+        brand_dto_list = []
+        for item in item_objs:
+            item_id = item.id
+            brand_objs = item.brand.all()
+            dto_list = self._convert_brands_to_dtos(item_id=item_id,
+                                                    brand_objs=brand_objs)
+            brand_dto_list += dto_list
+        return brand_dto_list
+
+
+    def _convert_brands_to_dtos(self, item_id, brand_objs):
+        brand_dtos = []
+
+        for brand in brand_objs:
+            dto = GetFormBrandDtoWithItemId(brand_id=brand.id,
+                                            name=brand.name,
+                                            min_quantity=brand.min_quantity,
+                                            max_quantity=brand.max_quantity,
+                                            price_per_item=brand.price_per_item,
+                                            item_id=item_id)
+            brand_dtos.append(dto)
+        return brand_dtos
+
+    def are_they_valid_offset_and_limit(self, offset: int, limit: int):
+        is_offest_valid = offset >= 0
+        is_limit_valid = limit >0
+        are_offset_and_limit_valid = is_offest_valid and is_limit_valid
+        return are_offset_and_limit_valid

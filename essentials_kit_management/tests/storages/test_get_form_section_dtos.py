@@ -9,13 +9,7 @@ from essentials_kit_management.interactors.storages.dtos import SectionDto
 
 
 @pytest.mark.django_db
-def test_get_form_section_dtos_with_valid_details_return_dtos(create_users,
-                                                              create_brands,
-                                                              create_items,
-                                                              create_orders,
-                                                              create_sections,
-                                                              create_forms):
-
+def test_get_form_section_dtos_with_valid_details_return_dtos(populate_data):
     # Arrange
     form_id = 1
 
@@ -23,7 +17,11 @@ def test_get_form_section_dtos_with_valid_details_return_dtos(create_users,
         SectionDto(
             section_id=1,
             name="section1",
-            description="section1")
+            description="section1"),
+        SectionDto(
+            section_id=2,
+            name="section2",
+            description="section2")
         ]
 
     storage = FormStorageImplementation()
@@ -32,4 +30,4 @@ def test_get_form_section_dtos_with_valid_details_return_dtos(create_users,
     actual_section_dtos = storage.get_form_sections_dtos(form_id=form_id)
 
     # Assert
-    assert expected_section_dtos == actual_section_dtos
+    assert actual_section_dtos == expected_section_dtos

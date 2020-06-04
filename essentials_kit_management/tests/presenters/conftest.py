@@ -4,9 +4,13 @@ import pytest
 
 from essentials_kit_management.interactors.storages.dtos import (
     HomePageFormDto, GetFormBrandDto, GetFormDto, GetFormSectionDto,
-    BrandDto, GetFormItemOrderDto, GetFormItemDto
+    BrandDto, GetFormItemOrderDto, GetFormItemDto, GetFormBrandDtoWithItemId,
+    GetMyWalletDto, GetUserTransactionDto, GetUserOrderDto
     )
 
+from essentials_kit_management.constants.enums import (
+    TransactionStatusEnum, TransactionTypeEnum
+    )
 
 
 @pytest.fixture()
@@ -68,25 +72,24 @@ def get_forms_expected_dict():
         
 
 
-
-
-
 @pytest.fixture()
 def get_form_details_dto():
 
-    brand1 = BrandDto(
+    brand1 = GetFormBrandDtoWithItemId(
         brand_id=1,
         name="HoneyBee",
         min_quantity=2,
         max_quantity=10,
-        price_per_item=100
+        price_per_item=100,
+        item_id=1
     )
-    brand2 = BrandDto(
+    brand2 = GetFormBrandDtoWithItemId(
             brand_id=2,
             name="KnockOut",
             min_quantity=2,
             max_quantity=11,
-            price_per_item=200
+            price_per_item=200,
+            item_id=2
     )
     
     order1 = GetFormItemOrderDto(order_id=1,
@@ -157,3 +160,87 @@ def get_form_expected_dict():
         ]
     }
     return form_dict
+
+
+@pytest.fixture()
+def get_user_transaction_dto_and_expected_dict():
+    expected_my_wallet_dto = GetMyWalletDto(
+            balance=1500,
+            transaction_dtos=[
+                GetUserTransactionDto(
+                    transaction_id=1111,
+                    amount=1000,
+                    date=datetime.datetime(2020, 10, 10, 0, 0, 0),
+                    status=TransactionStatusEnum.APPROVED.value,
+                    remark="wallet"),
+                GetUserTransactionDto(
+                    transaction_id=2222,
+                    amount=500,
+                    date=datetime.datetime(2020, 10, 10, 0, 0, 0),
+                    status=TransactionStatusEnum.PENDING.value,
+                    remark="wallet")
+                    ]
+            )
+    
+
+    expected_dict = {
+            "balance": 1500,
+            "transactions":[
+                    {
+                        "transaction_id": 1111,
+                        "date": "2020-10-10 00:00:00",
+                        "amount": 1000,
+                        "status": "APPROVED",
+                        "remark": "wallet"
+                    },
+                    {
+                        "transaction_id": 2222,
+                        "date": "2020-10-10 00:00:00",
+                        "amount": 500,
+                        "status": "PENDING",
+                        "remark": "wallet"
+                    }
+        ]
+        
+    }
+    return [expected_my_wallet_dto, expected_dict]
+
+
+@pytest.fixture()
+def get_user_ordered_details_dto_and_expected_dict():
+    ordered_details_dtos = [
+        GetUserOrderDto(
+            item_id=1,
+            items_added=10,
+            item_name="choco",
+            items_recived=5,
+            cost_incurred=500,
+            out_of_stock=0),
+        GetUserOrderDto(
+            item_id=2,
+            item_name="lace",
+            items_added=5,
+            items_recived=2,
+            cost_incurred=400,
+            out_of_stock=3)
+    ]
+
+    expected_dict = [
+        {
+            "item_id": 1,
+            "items_added": 10,
+            "item_name": "choco",
+            "items_recieved": 5,
+            "cost_incurred": 500,
+            "out_of_stock": 0
+        },
+        {
+            "item_id": 2,
+            "items_added": 5,
+            "item_name": "lace",
+            "items_recieved": 2,
+            "cost_incurred": 400,
+            "out_of_stock": 3
+        }
+    ]
+    return [ordered_details_dtos, expected_dict]

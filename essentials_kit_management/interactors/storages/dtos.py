@@ -4,7 +4,9 @@ from dataclasses import dataclass
 
 from typing import Optional, List
 
-from essentials_kit_management.constants.enums import FormStatusEnum
+from essentials_kit_management.constants.enums import (
+    FormStatusEnum, TransactionStatusEnum, TransactionTypeEnum
+    )
 
 
 @dataclass
@@ -42,7 +44,6 @@ class ItemDto:
     item_id: int
     name: str
     description: str
-    brand_id: int
 
 
 @dataclass
@@ -98,6 +99,22 @@ class GetSectionItemDto:
     description: str
     section_id: int
 
+@dataclass
+class GetFormItemDtoWithSectionId:
+    item_id: int
+    name: str
+    description: str
+    section_id: int
+
+@dataclass
+class GetFormBrandDtoWithItemId:
+    brand_id: int
+    name: str
+    min_quantity: int
+    max_quantity: int
+    price_per_item: int
+    item_id: int
+
 
 @dataclass
 class GetFormItemDto:
@@ -131,3 +148,79 @@ class GetFormBrandDto:
     min_quantity: int
     max_quantity: int
     price_per_item: int
+    item_id: int
+
+
+@dataclass
+class UpdateFormOrderDto:
+    item_id: int
+    order_id: int
+    brand_id: int
+    ordered_count: int
+    out_of_stock: int
+
+
+@dataclass
+class UpdateFormNewOrderDto:
+    form_id: int
+    section_id: int
+    order_details: UpdateFormOrderDto
+
+
+@dataclass
+class GetUserOrderDto:
+    item_id: int
+    item_name: str
+    items_added: int
+    items_recived: int
+    cost_incurred: int
+    out_of_stock: int
+
+
+@dataclass
+class GetUserItemDto:
+    item_id: int
+    name: str
+    description: str
+
+
+@dataclass
+class TransactionDto:
+    transaction_id: int
+    user_id: int
+    date: datetime
+    amount: int
+    status: TransactionStatusEnum
+    transaction_type: TransactionTypeEnum
+    screen_shot: str
+    remark: str
+
+@dataclass
+class GetUserTransactionDto:
+    transaction_id: int
+    date: datetime
+    amount: int
+    status: TransactionStatusEnum
+    remark: str
+
+@dataclass
+class GetMyWalletDto:
+    balance: int
+    transaction_dtos: List[GetUserTransactionDto]
+
+
+@dataclass
+
+class TransactionRequestDto:
+    amount_paid: int
+    transaction_id: int
+    transaction_type: TransactionTypeEnum
+    transaction_screenshot: str
+
+
+@dataclass
+class AccountDetailsDto:
+    upi_id: str
+    account_holder: str
+
+

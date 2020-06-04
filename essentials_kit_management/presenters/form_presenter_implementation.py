@@ -8,8 +8,9 @@ from essentials_kit_management.interactors.storages.dtos import (
 )
 from django_swagger_utils.drf_server.exceptions import NotFound
 
-from essentials_kit_management.constants.exception_messages import \
-    INVALID_FORM_ID
+from essentials_kit_management.constants.exception_messages import (
+    INVALID_FORM_ID, INVALID_OFFSET_LENGTH
+    )
 
 
 class FormPresenterImplementation(FormPresenterInterface):
@@ -123,3 +124,25 @@ class FormPresenterImplementation(FormPresenterInterface):
             "max_quantity": brand.max_quantity,
             "price_per_item": brand.price_per_item
         }
+
+
+    def get_user_ordered_details_response(self, order_detail_dtos):
+        order_details_list = [
+            self._convert_to_get_user_order_dto_to_dict(user_order_dto)
+            for user_order_dto in order_detail_dtos
+            ]
+        return order_details_list
+
+
+    def _convert_to_get_user_order_dto_to_dict(self, user_order_dtos):
+        return {
+            "item_id": user_order_dtos.item_id,
+            "item_name": user_order_dtos.item_name,
+            "items_added": user_order_dtos.items_added,
+            "items_recieved": user_order_dtos.items_recived,
+            "cost_incurred": user_order_dtos.cost_incurred,
+            "out_of_stock": user_order_dtos.out_of_stock
+        }
+
+    def raise_invalid_offset_and_limit_exception(self):
+        raise NotFound(*INVALID_OFFSET_LENGTH)

@@ -12,9 +12,8 @@ from essentials_kit_management.constants.exception_messages import \
 def test_raise_invalid_form_id_exception_with_invalid_form_id():
 
     # Arrange
-    exception_message = INVALID_FORM_ID[0]
+    exception_message =  INVALID_FORM_ID[0]
     exception_res_status = INVALID_FORM_ID[1]
-
     form_presenter = FormPresenterImplementation()
 
     # Act
