@@ -6,22 +6,28 @@ from essentials_kit_management.models import (
     )
 
 
-
 users_list = [
     {
-        "name": "user1",
-        "username": "user1123",
-        "password": "user1@",
-        "is_admin": False
-    },
-    {
-        "name": "user2",
-        "username": "user2123",
-        "password": "user2@",
-        "is_admin": False
-    },
-    {
         "name": "prudhvi",
+        "username": "prudhvi",
+        "password": "prudhvi123",
+        "is_admin": False
+    },
+    {
+        "name": "johncena",
+        "username": "johncena",
+        "password": "johncena123",
+        "is_admin": False
+    },
+    
+    {
+        "name": "che guevara",
+        "username": "che",
+        "password": "che123",
+        "is_admin": False
+    },
+    {
+        "name": "john",
         "username": 12345,
         "password": "12345",
         "is_admin": False
@@ -470,48 +476,53 @@ forms_details_list = [
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
         "status": "CLOSED",
-        "sections": []
-    },{
+        "sections": []},
+    {
         "name": "form8",
         "description": "form8 description",
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
         "status": "CLOSED",
         "sections": []
-    },{
+    },
+    {
         "name": "form9",
         "description": "form9 description",
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
         "status": "CLOSED",
         "sections": []
-    },{
+    },
+    {
         "name": "form10",
         "description": "form10 description",
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
-        "status": "CLOSED",
+        "status": "DONE",
         "sections": []
-    },{
+    },
+    {
         "name": "form11",
         "description": "form11 description",
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
         "status": "CLOSED",
         "sections": []
-    },{
+    },
+    {
         "name": "form12",
         "description": "form12 description",
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
         "status": "CLOSED",
         "sections": []
-    },{
+    },
+    {
         "name": "form13",
         "description": "form13 description",
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
-        "status": "CLOSED",
+        "status": "LIVE",
         "sections": []
     },
     {
@@ -521,14 +532,8 @@ forms_details_list = [
         "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
         "status": "CLOSED",
         "sections": []
-    },{
-        "name": "form15",
-        "description": "form15 description",
-        "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
-        "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
-        "status": "CLOSED",
-        "sections": []
-    },{
+    },
+    {
         "name": "form15",
         "description": "form15 description",
         "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
@@ -536,13 +541,22 @@ forms_details_list = [
         "status": "CLOSED",
         "sections": []
     },
+    {
+        "name": "form15",
+        "description": "form15 description",
+        "close_date": datetime.datetime(2020, 10, 8, 0, 0, 0),
+        "expected_delivery_date": datetime.datetime(2020, 10, 10, 0, 0, 0),
+        "status": "CLOSED",
+        "sections": []
+    }
 ]
 
 
 def populate_data():
-    
+
     create_users()
     create_account()
+    create_transactions()
 
     for form in forms_details_list:
         form_obj = Form.objects.create(name=form["name"], status=form["status"],
@@ -567,14 +581,8 @@ def populate_data():
                                                      price_per_item=brand["price_per_item"])
                     item_obj.brand.add(brand_obj)
 
-
     create_orders()
-    create_transactions()
-
     print("data populated successfully Hurrah!.......")
-
-
-
 
 
 
@@ -590,6 +598,16 @@ order_list = [
          "out_of_stock": 0
      },
      {
+         "user_id": 1,
+         "item_id": 2,
+         "brand_id": 4,
+         "form_id": 1,
+         "section_id": 1,
+         "count": 2,
+         "pending_count": 0,
+         "out_of_stock": 0
+     },
+     {
          "user_id":1,
          "item_id": 2,
          "brand_id": 4,
@@ -609,17 +627,6 @@ order_list = [
          "pending_count": 0,
          "out_of_stock": 0
      },
-     {
-         "user_id":1,
-         "item_id": 19,
-         "brand_id": 25,
-         "form_id": 3,
-         "section_id": 4,
-         "count": 2,
-         "pending_count": 0,
-         "out_of_stock": 0
-     },
-# user 2 orders
     {
          "user_id":2,
          "item_id": 1,
@@ -631,6 +638,17 @@ order_list = [
          "out_of_stock": 0
      },
      {
+         "user_id": 2,
+         "item_id": 2,
+         "brand_id": 4,
+         "form_id": 1,
+         "section_id": 1,
+         "count": 2,
+         "pending_count": 0,
+         "out_of_stock": 0
+     }
+     ,
+     {
          "user_id":2,
          "item_id": 2,
          "brand_id": 4,
@@ -649,34 +667,24 @@ order_list = [
          "count": 2,
          "pending_count": 0,
          "out_of_stock": 0
-     },
-     {
-         "user_id":2,
-         "item_id": 19,
-         "brand_id": 25,
-         "form_id": 3,
-         "section_id": 4,
-         "count": 2,
-         "pending_count": 0,
-         "out_of_stock": 0
      }
+     
 ]
 
-def create_orders():
-    order_objs = [
-            Order.objects.create(user_id=order["user_id"],
-                  item_id=order["item_id"],
-                  brand_id=order["brand_id"],
-                  form_id=order["form_id"],
-                  section_id=order["section_id"],
-                  count=order["count"],
-                  pending_count=order["pending_count"],
-                  out_of_stock=order["out_of_stock"]
-                )
-            for order in order_list
-            ]
-    return order_objs
 
+def create_orders():
+    for order in order_list:
+        print("order details:",order)
+        Order.objects.create(
+              user_id=order["user_id"],
+              item_id=order["item_id"],
+              brand_id=order["brand_id"],
+              form_id=order["form_id"],
+              section_id=order["section_id"],
+              count=order["count"],
+              pending_count=order["pending_count"],
+              out_of_stock=order["out_of_stock"]
+        )
 
 
 transaction_list = [

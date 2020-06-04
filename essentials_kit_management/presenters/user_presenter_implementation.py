@@ -34,7 +34,7 @@ class UserPresenterImplementation(UserPresenterInterface):
     def get_access_token_response(self, acces_token_dto: UserAuthTokensDTO): # ->access token Dto
         return {
             "user_id": acces_token_dto.user_id,
-            "acces_token": acces_token_dto.access_token,
+            "access_token": acces_token_dto.access_token,
             "refresh_token": acces_token_dto.refresh_token,
             "expires_in": self.get_expires_time_fomate(
                 acces_token_dto.expires_in)

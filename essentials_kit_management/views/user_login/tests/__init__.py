@@ -2,7 +2,7 @@
 
 APP_NAME = "essentials_kit_management"
 OPERATION_NAME = "user_login"
-REQUEST_METHOD = "get"
+REQUEST_METHOD = "post"
 URL_SUFFIX = "users/login/"
 
 from .test_case_01 import TestCase01UserLoginAPITestCase

@@ -685,7 +685,7 @@
                     "$ref": "#/definitions/CreateSectionDeatails"
                 }
             }
-        },
+        }
     },
 
     "paths": {
@@ -712,13 +712,10 @@
             }
         },
         "/users/login/": {
-            "get": {
+            "post": {
                 "operationId": "user_login",
                 "summary": "User Login",
                 "description": "return user access token if user logged with valid details",
-                "security": [{
-                    "oauth": []
-                }],
                 "parameters": [{
                     "$ref": "#/parameters/UserLoginParameters"
                 }],

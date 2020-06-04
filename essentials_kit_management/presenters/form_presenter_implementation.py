@@ -15,8 +15,8 @@ from essentials_kit_management.constants.exception_messages import (
 
 class FormPresenterImplementation(FormPresenterInterface):
 
-    def get_forms_response(self, form_dtos):
-        total_forms_count = len(form_dtos)
+    def get_forms_response(self, form_dtos, total_forms_count: int):
+        total_forms_count = total_forms_count
 
         forms = [
             {

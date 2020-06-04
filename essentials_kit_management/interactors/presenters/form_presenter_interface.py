@@ -8,7 +8,8 @@ from essentials_kit_management.interactors.storages.dtos import (
 
 class FormPresenterInterface():
 
-    def get_forms_response(self, form_dtos):
+    def get_forms_response(self, form_dtos,
+                            total_forms_count: int):
         pass
 
     def raise_invalid_form_id_exception(self):

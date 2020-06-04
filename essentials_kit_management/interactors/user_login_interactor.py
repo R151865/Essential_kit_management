@@ -27,14 +27,14 @@ class UserLoginInteractor:
         try:
             self.user_storage.validate_password(password=password)
         except InvalidPassword:
-            self.user_presenter.raise_invalid_password_exception()
+            return self.user_presenter.raise_invalid_password_exception()
 
         try:
             user_id = self.user_storage.validate_username(
                 username=username,
                 password=password)
         except InvalidUsername:
-            self.user_presenter.raise_invalid_username_exception()
+            return self.user_presenter.raise_invalid_username_exception()
 
         service = OAuthUserAuthTokensService(oauth2_storage=self.oauth2_storage)
         acces_token_dto = service.create_user_auth_tokens(user_id=user_id)

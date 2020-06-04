@@ -18,7 +18,7 @@ def test_get_access_token_response_with_valid_details_return_dto():
         )
     expected_access_token_dict = {
             "user_id": 1,
-            "acces_token": "QTRTUGFTTTBBBBNS1334",
+            "access_token": "QTRTUGFTTTBBBBNS1334",
             "refresh_token": "WQEDRTT#$%^REDET",
             "expires_in": "2020-10-10 00:00:00.000000"
         }

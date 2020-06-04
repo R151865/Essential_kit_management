@@ -31,6 +31,9 @@ class GetFormsInteractor:
             return
 
         forms_dtos = self.form_storage.get_forms_dtos(offset=offset, limit=limit)
+        total_forms_count = len(forms_dtos)
+        forms_dtos =forms_dtos[offset: offset+limit]
+
         user_order_dtos = self.form_storage.get_user_order_dtos(user_id)
 
         user_brand_dtos = self.form_storage.get_user_brand_dtos(user_order_dtos)
@@ -47,7 +50,7 @@ class GetFormsInteractor:
             form_complete_details_dtos)
 
         response = self.form_presenter.get_forms_response(
-            form_dtos=form_details_dtos)
+            form_dtos=form_details_dtos, total_forms_count=total_forms_count)
 
         return response
 

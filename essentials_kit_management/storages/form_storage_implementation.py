@@ -24,7 +24,9 @@ class FormStorageImplementation(FormStorageInterface):
                        offset: int,
                        limit: int) ->List[FormCompleteDetailsDto]:
 
-        form_objs = Form.objects.filter()[offset: offset+limit]
+        form_objs = Form.objects.filter()
+        #total_forms_count = len(form_objs)
+        #form_objs = form_objs[offset: offset+limit]
         form_dtos = self._convert_form_objs_to_dtos(form_objs=form_objs)
 
         return form_dtos
