@@ -230,7 +230,7 @@ def get_user_ordered_details_dto_and_expected_dict():
             "item_id": 1,
             "items_added": 10,
             "item_name": "choco",
-            "items_recieved": 5,
+            "items_recived": 5,
             "cost_incurred": 500,
             "out_of_stock": 0
         },
@@ -238,7 +238,7 @@ def get_user_ordered_details_dto_and_expected_dict():
             "item_id": 2,
             "items_added": 5,
             "item_name": "lace",
-            "items_recieved": 2,
+            "items_recived": 2,
             "cost_incurred": 400,
             "out_of_stock": 3
         }

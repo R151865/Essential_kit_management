@@ -7,7 +7,6 @@ from essentials_kit_management.constants.enums import (
 )
 
 
-
 class User(AbstractUser):
     name = models.CharField(max_length=300)
     is_admin = models.BooleanField(default=False)

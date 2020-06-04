@@ -11,15 +11,34 @@ users_list = [
     {
         "name": "sulthan",
         "username": 9876543213,
-        "password": "sulthan123"},
+        "password": "sulthan123",
+        "is_admin": False
+    },
     {
         "name": "anjali ameer",
         "username": 9876543214,
-        "password": "anju123"},
+        "password": "anju123",
+        "is_admin": False
+    },
     {
-        "name": "dulkar",
-        "username": 9876543215,
-        "password": "dulkar123"}
+        "name": "prudhvi",
+        "username": 12345,
+        "password": "12345",
+        "is_admin": False
+    },
+    {
+        "name": "Admin1",
+        "username": 111111111,
+        "password": "11111111",
+        "is_admin": True
+    },
+    {
+        "name": "Admin2",
+        "username": "22222222",
+        "password": "anju123",
+        "is_admin": True
+    }
+
     ]
 
 
@@ -129,7 +148,50 @@ form_list = [
         "description": "form3",
         "close_date": "2020-10-10",
         "expected_delivery_date": "2020-10-10",
-        "status": "DONE" }
+        "status": "DONE" },
+    {
+        "name": "form1",
+        "description": "form1",
+        "close_date": "2020-10-10",
+        "expected_delivery_date": "2020-10-10",
+        "status": "LIVE" },
+    {
+        "name": "form2",
+        "description": "form2",
+        "close_date": "2020-10-10",
+        "expected_delivery_date": "2020-10-10",
+        "status": "CLOSED" },
+    {
+        "name": "form3",
+        "description": "form3",
+        "close_date": "2020-10-10",
+        "expected_delivery_date": "2020-10-10",
+        "status": "DONE" },
+    {
+        "name": "form1",
+        "description": "form1",
+        "close_date": "2020-10-10",
+        "expected_delivery_date": "2020-10-10",
+        "status": "LIVE" },
+    {
+        "name": "form2",
+        "description": "form2",
+        "close_date": "2020-10-10",
+        "expected_delivery_date": "2020-10-10",
+        "status": "CLOSED" },
+    {
+        "name": "form3",
+        "description": "form3",
+        "close_date": "2020-10-10",
+        "expected_delivery_date": "2020-10-10",
+        "status": "DONE" },
+    {
+        "name": "form1",
+        "description": "form1",
+        "close_date": "2020-10-10",
+        "expected_delivery_date": "2020-10-10",
+        "status": "LIVE" }
+
 
     ]
 
@@ -340,7 +402,8 @@ def create_users():
             User.objects.create(
                 name=user["name"],
                 username=user["username"],
-                password=user["password"])
+                password=user["password"],
+                is_admin=user["is_admin"])
             for user in users_list
         ]
     return user_objs

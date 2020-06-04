@@ -413,7 +413,6 @@
                 "out_of_stock"
             ]
         },
-
         "CreateFormDetails": {
             "type": "object",
             "properties": {
@@ -426,6 +425,25 @@
             },
             "required": [
                 "form_name",
+                "description"
+            ]
+        },
+        "CreateSectionDeatails": {
+            "type": "object",
+            "properties": {
+                "section_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "section_id",
+                "name",
                 "description"
             ]
         }
@@ -506,7 +524,50 @@
         "CreateFormParameters": {
             "name": "form",
             "in": "body",
-            "description": "up"
+            "description": "details for creating form",
+            "schema": {
+                "$ref": "#/definitions/CreateFormDetails"
+            }
+        },
+        "CreateSectionsParameters": {
+            "name": "section",
+            "in": "body",
+            "description": "details for create sections",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "form_id": {
+                        "type": "integer"
+                    },
+                    "sections": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "section_id": {
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "section_id",
+                                "name",
+                                "description"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "form_id",
+                    "sections"
+                ]
+            }
+
         }
 
     },
@@ -601,8 +662,32 @@
             "schema": {
                 "$ref": "#/definitions/AccountDetails"
             }
-        }
+        },
+        "CreateFormResponse": {
+            "description": "Succesfully form created",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "form_id": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "form_id"
+                ]
+            }
+        },
+        "CreateSectionResponse": {
+            "description": "Successfull Sections Created",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/CreateSectionDeatails"
+                }
+            }
+        },
     },
+
     "paths": {
 
         "/users/signup/": {
@@ -794,14 +879,39 @@
             "post": {
                 "operationId": "create_form",
                 "summary": "Create Form",
-                "description": "return form details after creation of form",
+                "description": "return form details after creation of form_id",
                 "security": [{
-                    "oauth2": ["superuser"]
+                    "oauth": ["superuser"]
                 }],
-                "parameters": [],
-                "responses": {}
+                "parameters": [{
+                    "$ref": "#/parameters/CreateFormParameters"
+                }],
+                "responses": {
+                    "201": {
+                        "$ref": "#/responses/CreateFormResponse"
+                    }
+                }
+            }
+        },
+        "/forms/sections/create/": {
+            "post": {
+                "operationId": "create_sections",
+                "summary": "Create Sections",
+                "description": "creates section details",
+                "security": [{
+                    "oauth": ["superuser"]
+                }],
+                "parameters": [{
+                    "$ref": "#/parameters/CreateSectionsParameters"
+                }],
+                "responses": {
+                    "201": {
+                        "$ref": "#/responses/CreateSectionResponse"
+                    }
+                }
             }
         }
     }
+
 
 }

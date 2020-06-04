@@ -139,7 +139,7 @@ class FormPresenterImplementation(FormPresenterInterface):
             "item_id": user_order_dtos.item_id,
             "item_name": user_order_dtos.item_name,
             "items_added": user_order_dtos.items_added,
-            "items_recieved": user_order_dtos.items_recived,
+            "items_recived": user_order_dtos.items_recived,
             "cost_incurred": user_order_dtos.cost_incurred,
             "out_of_stock": user_order_dtos.out_of_stock
         }

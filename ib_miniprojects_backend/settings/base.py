@@ -24,6 +24,7 @@ ALLOWED_HOSTS = [
     "ib-miniprojects-backend-beta.apigateway.in",
     "ib-miniprojects-backend-gamma.apigateway.in",
     "127.0.0.1",
+    "54.255.236.37",
     "localhost",
     "644fb43b8b924285bc9916acc4f42cb3.vfs.cloud9.ap-southeast-1.amazonaws.com"
 ]
